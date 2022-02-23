@@ -2,6 +2,7 @@ from vijaynaidu22/mule4.4.0:latest
 
 #Copy and deploy mule application in runtime
 CMD echo "--- Deploying mule application in runtime ---"
+cd /target
 COPY  *.jar mule-enterprise-standalone-4.4.0/apps/
 RUN ls -ltr mule-enterprise-standalone-4.4.0/apps/
 

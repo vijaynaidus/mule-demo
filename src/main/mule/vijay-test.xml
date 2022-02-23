@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="37a0ec28-a317-4c49-af28-bfca38eb91da" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="vijay-testFlow" doc:id="25363c55-5e51-47c9-b190-4e2830b90525" >
+		<http:listener doc:name="Listener" doc:id="1d1cfa7b-e039-409a-b694-f4aa1baad641" config-ref="HTTP_Listener_config" path="vijay"/>
+		<choice doc:name="Choice" doc:id="81d48072-7e5d-43b3-ad73-d6196742b2b4" >
+			<when expression='#[attributes.queryParams.name == "india" or attributes.queryParams.name == "India"]'>
+				<ee:transform doc:name="Transform Message" doc:id="3bdc789a-0437-4991-b077-966636eb46a1">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Namasthe, Welcome to india",
+	"Date": now()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="fb332f0b-eb7a-4db3-8cb5-62d42ec0cf85" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Hello Welcome to " ++ attributes.queryParams.name default "",
+	"Date": now()
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
